@@ -13,7 +13,14 @@ class AllTasksPage extends StatefulWidget {
 
 class _AllTasksPageState extends State<AllTasksPage> {
   final todoList = ToDo.toDos;
+  List<ToDo> foundtodoList = [];
   final todoEditor = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    foundtodoList = todoList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                         margin: EdgeInsets.only(top: 20, bottom: 20),
                         child: Text('Alle Aufgaben', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                       ),
-                      for( ToDo todo in todoList)
+                      for( ToDo todo in foundtodoList.reversed)
                         ToDoItem(
                           todo: todo, 
                           onIsDoneChanged: handleIsDoneChange,
@@ -102,12 +109,24 @@ class _AllTasksPageState extends State<AllTasksPage> {
       todoList.removeWhere((item) => item.id == id);
     });
   }
-}
+
+  void search(String query){
+    List<ToDo> result = [];
+    if(query.isEmpty){
+      result = todoList;
+    } else {
+      result = todoList.where((todo) => todo.title!.toUpperCase().contains(query.toUpperCase())).toList();
+    }
+    setState(() {
+      foundtodoList = result;
+    });
+  }
 
 Widget searchField(){
   return Container(
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
     child: TextField(
+      onChanged: (queryString) => search(queryString),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10),
         prefixIcon: Icon(Icons.search, size: 25, color: Colors.black,),
@@ -116,4 +135,4 @@ Widget searchField(){
       ),
     ),
   );
-}
+}}
