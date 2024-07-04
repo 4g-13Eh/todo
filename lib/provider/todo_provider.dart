@@ -1,40 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:todo/model/todo.dart';
 import 'package:todo/service/todo_service.dart';
+import 'package:uuid/uuid.dart';
 
 class ToDoProvider with ChangeNotifier {
-  final List<ToDo> todoList = ToDo.toDos;
-  List<ToDo> foundtodoList = [];
+  List<ToDo> _todoList = [];
+  //List<ToDo> foundtodoList = [];
+
+  List<ToDo> get todoList => _todoList;
 
   ToDoProvider() {
-    foundtodoList = todoList;
+    loadTodos();
+  }
+
+  void loadTodos() async {
+    _todoList = await ToDoService.readToDoList();
+    notifyListeners();
+  }
+
+  void saveTodos() async {
+    await ToDoService.writeToDoList(_todoList);
   }
 
   void toggleIsDone(ToDo todo) {
-    ToDoService.toggleIsDone(todo);
+    todo.isDone = !todo.isDone;
+    saveTodos();
     notifyListeners();
   }
 
   void addToDo(String title) {
-    ToDoService.addToDo(todoList, title);
-    foundtodoList = todoList;
+    _todoList.add(ToDo(id: Uuid().v4(), title: title, isDone: false));
+    saveTodos();
     notifyListeners();
   }
 
   void deleteToDo(String id) {
-    ToDoService.deleteToDo(todoList, id);
-    foundtodoList = todoList;
+    _todoList.removeWhere((item) => item.id == id);
+    saveTodos();
     notifyListeners();
   }
 
   void search(String query) {
-    foundtodoList = ToDoService.search(todoList, query);
+    _todoList = ToDoService.search(todoList, query);
     notifyListeners();
   }
 
     void deleteAllToDos() {
-    ToDoService.deleteAllToDos(todoList);
-    foundtodoList = todoList;
+      _todoList.clear();
+      saveTodos();
     notifyListeners();
   }
 }

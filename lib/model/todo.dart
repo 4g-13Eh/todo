@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ToDo {
   String? id;
   String? title;
@@ -8,6 +10,20 @@ class ToDo {
     required this.title,
     this.isDone = false,
   });
+  
+  factory ToDo.fromJson(Map<String, dynamic> json) {
+    return ToDo(
+      id: json['id'],
+      title: json['title'],
+      isDone: json['isDone'],
+    );
+  }
 
-  static List<ToDo> toDos = [];
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'isDone': isDone,
+    };
+  }
 }
