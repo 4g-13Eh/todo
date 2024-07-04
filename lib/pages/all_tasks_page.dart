@@ -19,7 +19,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
     final todoProvider = Provider.of<ToDoProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('ToDo App'), backgroundColor: Color.fromARGB(255, 188, 245, 56)),
+      appBar: AppBar(title: const Text('TaskHub'), backgroundColor: Color.fromARGB(255, 223, 123, 10), centerTitle: true, ),
       body: Stack(
         children: [
           Container(
