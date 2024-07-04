@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:todo/widgets/todo_item.dart';
 import 'package:todo/model/todo.dart';
+import 'package:uuid/uuid.dart';
 
 class AllTasksPage extends StatefulWidget {
   AllTasksPage({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.add, color: Colors.white,),
-                  onPressed: (){},
+                  onPressed: (){addToDo(todoEditor.text);},
                 ),)
             ],),
             )
@@ -83,6 +84,17 @@ class _AllTasksPageState extends State<AllTasksPage> {
 
   void handleIsDoneChange(ToDo todo){
     setState((){todo.isDone = !todo.isDone;});
+  }
+
+  void addToDo(todo){
+    setState(() {
+      todoList.add(ToDo(
+        id: Uuid().v4(),
+        title: todoEditor.text,
+        isDone: false
+      ));
+      todoEditor.clear();
+    });
   }
 
   void deleteToDo(String id){
