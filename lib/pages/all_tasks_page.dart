@@ -9,10 +9,30 @@ class AllTasksPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('ToDo App'), backgroundColor: Color.fromARGB(255, 188, 245, 56)),
       body: Container(
-        child: Text('All Tasks Page'),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            searchField(),
+            
+          ],
+        ),
         
-      ), 
+      ),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
     );
   }
+}
+
+Widget searchField(){
+  return Container(
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+    child: TextField(
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(10),
+        prefixIcon: Icon(Icons.search, size: 25, color: Colors.black,),
+        prefixIconConstraints: BoxConstraints(maxHeight: 20, minHeight: 20),
+        hintText: 'Suchen',
+      ),
+    ),
+  );
 }
