@@ -12,6 +12,7 @@ class AllTasksPage extends StatefulWidget {
 
 class _AllTasksPageState extends State<AllTasksPage> {
   final todoList = ToDo.toDos;
+  final todoEditor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                         ToDoItem(
                           todo: todo, 
                           onIsDoneChanged: handleIsDoneChange,
-                          onDelete: (){},
+                          onDelete: deleteToDo,
                         )
                     ],
                   )
@@ -54,6 +55,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                   boxShadow: const [BoxShadow(color: Color.fromARGB(255, 46, 131, 216), blurRadius: 5)]
                 ),
                 child: TextField(
+                  controller: todoEditor,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     hintText: 'Neue Aufgabe',
@@ -78,8 +80,15 @@ class _AllTasksPageState extends State<AllTasksPage> {
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
     );
   }
+
   void handleIsDoneChange(ToDo todo){
     setState((){todo.isDone = !todo.isDone;});
+  }
+
+  void deleteToDo(String id){
+    setState(() {
+      todoList.removeWhere((item) => item.id == id);
+    });
   }
 }
 

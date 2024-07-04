@@ -19,7 +19,7 @@ class ToDoItem extends StatelessWidget{
         leading: Icon(todo.isDone? Icons.check_box : Icons.check_box_outline_blank, color: Color.fromARGB(255, 127, 32, 216), size: 30),
         title: Text(todo.title!, style: TextStyle(fontSize:18, decoration: todo.isDone? TextDecoration.lineThrough : null),),
         trailing: Container(
-          child: IconButton(icon: Icon(Icons.delete), onPressed: (){print('tapped delete');}, color: Colors.red, iconSize: 30,)
+          child: IconButton(icon: Icon(Icons.delete), onPressed: (){onDelete(todo.id);}, color: Colors.red, iconSize: 30,)
         ),
       ),
     );
