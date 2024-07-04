@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/widgets/todo_item.dart';
+import 'package:todo/provider/todo_provider.dart';
 import 'package:todo/model/todo.dart';
-import 'package:uuid/uuid.dart';
 
 class AllTasksPage extends StatefulWidget {
   AllTasksPage({Key? key}) : super(key: key);
@@ -12,18 +12,12 @@ class AllTasksPage extends StatefulWidget {
 }
 
 class _AllTasksPageState extends State<AllTasksPage> {
-  final todoList = ToDo.toDos;
-  List<ToDo> foundtodoList = [];
   final todoEditor = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    foundtodoList = todoList;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final todoProvider = Provider.of<ToDoProvider>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('ToDo App'), backgroundColor: Color.fromARGB(255, 188, 245, 56)),
       body: Stack(
@@ -32,7 +26,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                searchField(),
+                searchField(todoProvider),
                 Expanded(
                   child: ListView(
                     children: [
@@ -40,11 +34,11 @@ class _AllTasksPageState extends State<AllTasksPage> {
                         margin: EdgeInsets.only(top: 20, bottom: 20),
                         child: Text('Alle Aufgaben', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                       ),
-                      for( ToDo todo in foundtodoList.reversed)
+                      for( ToDo todo in todoProvider.foundtodoList.reversed)
                         ToDoItem(
                           todo: todo, 
-                          onIsDoneChanged: handleIsDoneChange,
-                          onDelete: deleteToDo,
+                          onIsDoneChanged: todoProvider.toggleIsDone,
+                          onDelete: todoProvider.deleteToDo,
                         )
                     ],
                   )
@@ -79,7 +73,10 @@ class _AllTasksPageState extends State<AllTasksPage> {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.add, color: Colors.white,),
-                  onPressed: (){addToDo(todoEditor.text);},
+                  onPressed: (){ 
+                    todoProvider.addToDo(todoEditor.text);
+                    todoEditor.clear();
+                  },
                 ),)
             ],),
             )
@@ -89,50 +86,18 @@ class _AllTasksPageState extends State<AllTasksPage> {
     );
   }
 
-  void handleIsDoneChange(ToDo todo){
-    setState((){todo.isDone = !todo.isDone;});
-  }
-
-  void addToDo(todo){
-    setState(() {
-      todoList.add(ToDo(
-        id: Uuid().v4(),
-        title: todoEditor.text,
-        isDone: false
-      ));
-      todoEditor.clear();
-    });
-  }
-
-  void deleteToDo(String id){
-    setState(() {
-      todoList.removeWhere((item) => item.id == id);
-    });
-  }
-
-  void search(String query){
-    List<ToDo> result = [];
-    if(query.isEmpty){
-      result = todoList;
-    } else {
-      result = todoList.where((todo) => todo.title!.toUpperCase().contains(query.toUpperCase())).toList();
-    }
-    setState(() {
-      foundtodoList = result;
-    });
-  }
-
-Widget searchField(){
-  return Container(
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-    child: TextField(
-      onChanged: (queryString) => search(queryString),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(10),
-        prefixIcon: Icon(Icons.search, size: 25, color: Colors.black,),
-        prefixIconConstraints: BoxConstraints(maxHeight: 20, minHeight: 20),
-        hintText: 'Suchen',
+  Widget searchField(ToDoProvider todoProvider){
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: TextField(
+        onChanged: (queryString) => todoProvider.search(queryString),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(10),
+          prefixIcon: Icon(Icons.search, size: 25, color: Colors.black,),
+          prefixIconConstraints: BoxConstraints(maxHeight: 20, minHeight: 20),
+          hintText: 'Suchen',
+        ),
       ),
-    ),
-  );
-}}
+    );
+  }
+}
