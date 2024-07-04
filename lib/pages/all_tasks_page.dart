@@ -3,9 +3,14 @@ import 'package:flutter/rendering.dart';
 import 'package:todo/widgets/todo_item.dart';
 import 'package:todo/model/todo.dart';
 
-class AllTasksPage extends StatelessWidget {
+class AllTasksPage extends StatefulWidget {
   AllTasksPage({Key? key}) : super(key: key);
 
+  @override
+  State<AllTasksPage> createState() => _AllTasksPageState();
+}
+
+class _AllTasksPageState extends State<AllTasksPage> {
   final todoList = ToDo.toDos;
 
   @override
@@ -27,7 +32,11 @@ class AllTasksPage extends StatelessWidget {
                         child: Text('Alle Aufgaben', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                       ),
                       for( ToDo todo in todoList)
-                        ToDoItem(todo: todo)
+                        ToDoItem(
+                          todo: todo, 
+                          onIsDoneChanged: handleIsDoneChange,
+                          onDelete: (){},
+                        )
                     ],
                   )
                 )
@@ -68,6 +77,9 @@ class AllTasksPage extends StatelessWidget {
       ),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
     );
+  }
+  void handleIsDoneChange(ToDo todo){
+    setState((){todo.isDone = !todo.isDone;});
   }
 }
 
