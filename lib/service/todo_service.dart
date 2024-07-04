@@ -25,4 +25,8 @@ class ToDoService {
       return todoList.where((todo) => todo.title!.toUpperCase().contains(query.toUpperCase())).toList();
     }
   }
+
+  static void deleteAllToDos(List<ToDo> todoList) {
+    todoList.clear();
+  }
 }

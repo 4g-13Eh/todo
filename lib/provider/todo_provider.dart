@@ -31,4 +31,10 @@ class ToDoProvider with ChangeNotifier {
     foundtodoList = ToDoService.search(todoList, query);
     notifyListeners();
   }
+
+    void deleteAllToDos() {
+    ToDoService.deleteAllToDos(todoList);
+    foundtodoList = todoList;
+    notifyListeners();
+  }
 }

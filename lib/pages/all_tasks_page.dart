@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todo/widgets/todo_item.dart';
 import 'package:todo/provider/todo_provider.dart';
 import 'package:todo/model/todo.dart';
+import 'package:shake/shake.dart';
+import 'package:vibration/vibration.dart';
 
 class AllTasksPage extends StatefulWidget {
   AllTasksPage({Key? key}) : super(key: key);
@@ -13,6 +15,23 @@ class AllTasksPage extends StatefulWidget {
 
 class _AllTasksPageState extends State<AllTasksPage> {
   final todoEditor = TextEditingController();
+
+@override
+  void initState() {
+    super.initState();
+    ShakeDetector detector = ShakeDetector.autoStart(
+      onPhoneShake: () {
+        print('shake');
+      },
+      shakeSlopTimeMS: 500,
+      shakeCountResetTime: 3000,
+      shakeThresholdGravity: 0.1,
+    );
+
+    // To close: detector.stopListening();
+    // ShakeDetector.waitForStart() waits for user to call detector.startListening();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +94,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                   icon: const Icon(Icons.add, color: Colors.white,),
                   onPressed: (){ 
                     todoProvider.addToDo(todoEditor.text);
+                    Vibration.vibrate(duration: 2000, amplitude: 128);
                     todoEditor.clear();
                   },
                 ),)
