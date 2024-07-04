@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/pages/all_tasks_page.dart';
+import 'package:todo/provider/todo_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: AllTasksPage(),
+    return ChangeNotifierProvider(
+      create: (context) => ToDoProvider(),
+      child: MaterialApp(
+        home: AllTasksPage(),
+      ),
     );
   }
 }
-  
