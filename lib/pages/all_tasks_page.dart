@@ -53,7 +53,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
                         margin: EdgeInsets.only(top: 20, bottom: 20),
                         child: Text('Alle Aufgaben', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                       ),
-                      for( ToDo todo in todoProvider.foundtodoList.reversed)
+                      for( ToDo todo in todoProvider.todoList.reversed)
                         ToDoItem(
                           todo: todo, 
                           onIsDoneChanged: todoProvider.toggleIsDone,
