@@ -19,26 +19,28 @@ class _AllTasksPageState extends State<AllTasksPage> {
   @override
   void initState() {
     super.initState();
-    ShakeDetector detector = ShakeDetector.autoStart(
-      onPhoneShake: () {
-        AlertDialog(
+    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
+      showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
           title: const Text('Alle Aufgaben löschen?'),
+          content: const Text('Möchtest du wirklich alle Aufgaben löschen?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Abbrechen'),
             ),
             TextButton(
-              onPressed: () {
-                Provider.of<ToDoProvider>(context, listen: false).deleteAllToDos();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Ja'),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Löschen'),
             ),
           ],
-          );
-      //Provider.of<ToDoProvider>(context, listen: false).deleteAllToDos();
-      //Vibration.vibrate(duration: 2000, amplitude: 128);
+        )
+        ).then((value) {
+          if(value == true){
+            Provider.of<ToDoProvider>(context, listen: false).deleteAllToDos();
+          }
+        });
     });
 
     detector.startListening();
