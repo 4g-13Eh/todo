@@ -75,3 +75,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Flutter framework for making app development easy and fun.
 - All the open-source libraries used in this project.
 - [Ben](https://github.com/BWizard06) for helping develop the search functionality 😭💀.
+- [Marco](https://github.com/MarcoSpinaBZZ) for giving me his phone for testing.
