@@ -16,22 +16,35 @@ class AllTasksPage extends StatefulWidget {
 class _AllTasksPageState extends State<AllTasksPage> {
   final todoEditor = TextEditingController();
 
-@override
+  @override
   void initState() {
     super.initState();
     ShakeDetector detector = ShakeDetector.autoStart(
       onPhoneShake: () {
-        print('shake');
-      },
-      shakeSlopTimeMS: 500,
-      shakeCountResetTime: 3000,
-      shakeThresholdGravity: 0.1,
-    );
+        AlertDialog(
+          title: const Text('Alle Aufgaben löschen?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Abbrechen'),
+            ),
+            TextButton(
+              onPressed: () {
+                Provider.of<ToDoProvider>(context, listen: false).deleteAllToDos();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ja'),
+            ),
+          ],
+          );
+      //Provider.of<ToDoProvider>(context, listen: false).deleteAllToDos();
+      //Vibration.vibrate(duration: 2000, amplitude: 128);
+    });
 
+    detector.startListening();
     // To close: detector.stopListening();
     // ShakeDetector.waitForStart() waits for user to call detector.startListening();
   }
-
 
   @override
   Widget build(BuildContext context) {

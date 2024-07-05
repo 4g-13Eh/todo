@@ -376,6 +376,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  shake_detector_android:
+    dependency: "direct main"
+    description:
+      name: shake_detector_android
+      sha256: dfe8ca3684e99480cb20a3cf4c59e7b1220d311458427314f35b7fe0f61bdd4f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   sky_engine:
     dependency: transitive
     description: flutter
